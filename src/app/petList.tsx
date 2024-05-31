@@ -3,6 +3,8 @@ import HeaderWithTitle from "../components/headers/HeaderWithMenu";
 import Background from "../components/ui/Background";
 import useCollection from "../firebase/hooks/useCollection";
 import Card from "../components/containers/Card";
+import { useContext } from "react";
+import AppContext from "../contexts/AppContext";
 
 type Pet = {
   id?: string;
@@ -13,14 +15,15 @@ type Pet = {
 
 export default function petList() {
   const { data } = useCollection<Pet>("pets");
+  const app = useContext(AppContext);
 
   const renderItem = ({ item }: { item: Pet }) => (
     <View style={styles.container}>
       <Card>
-        <Text style={styles.list}>ID: {item.id}</Text>
-        <Text style={styles.list}>Name: {item.name}</Text>
-        <Text style={styles.list}>Type: {item.type}</Text>
-        <Text style={styles.list}>Age: {item.age}</Text>
+        <Text style={[{color: app!.textColor}]}>ID: {item.id}</Text>
+        <Text style={[{color: app!.textColor}]}>Name: {item.name}</Text>
+        <Text style={[{color: app!.textColor}]}>Type: {item.type}</Text>
+        <Text style={[{color: app!.textColor}]}>Age: {item.age}</Text>
       </Card>
     </View>
   );
@@ -40,9 +43,6 @@ export default function petList() {
 }
 
 const styles = StyleSheet.create({
-  list: {
-    color: "#fff",
-  },
   container: {
     marginBottom: 20,
   },

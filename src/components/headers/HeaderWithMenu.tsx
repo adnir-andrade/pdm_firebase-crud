@@ -1,17 +1,19 @@
-import { ImageBackground, StyleSheet, TouchableOpacity } from "react-native";
-import React from "react";
+import { ImageBackground, StyleSheet, Switch, TouchableOpacity, View } from "react-native";
+import React, { useContext, useState } from "react";
 import { Stack } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import { useRouter, useNavigation } from "expo-router";
-import { useRoute } from "@react-navigation/native";
 import useToken from "../../hooks/useToken";
+import AppContext from "../../contexts/AppContext";
 
 type HeaderWithTitleProps = {
   title: string;
 };
 
 export default function HeaderWithMenu({ title }: HeaderWithTitleProps) {
+  const app = useContext(AppContext);
+
   const { showActionSheetWithOptions } = useActionSheet();
   const router = useRouter();
   const navigation = useNavigation();
@@ -48,32 +50,44 @@ export default function HeaderWithMenu({ title }: HeaderWithTitleProps) {
     );
   };
 
+  const source_light =  require("../../../assets/images/logo_black.png");
+  const source_dark =  require("../../../assets/images/logo.png");
+  const logo = app!.isEnabled ? source_light : source_dark;
+
   return (
     <Stack.Screen
       options={{
         headerShown: true,
         headerBackground: () => (
           <ImageBackground
-            source={require("../../../assets/images/logo.png")}
-            style={styles.background}
+            source={logo}
+            style={[styles.background, {backgroundColor: app!.backgroundColor}]}
             resizeMode="contain"
           />
         ),
         title,
         headerRight: () => (
-          <TouchableOpacity style={styles.menuIcon}>
-            <Ionicons
-              name="menu-outline"
-              size={24}
-              color="#cdab8f"
-              onPress={handleOpen}
+          <View style={styles.headerRightContainer}>
+            <Switch
+              trackColor={{ false: "#767577", true: "#81b0ff" }}
+              thumbColor={app!.isEnabled ? "#f5dd4b" : "#f4f3f4"}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={app!.toggleSwitch}
+              value={app!.isEnabled}
             />
-          </TouchableOpacity>
+            <TouchableOpacity style={styles.menuIcon} onPress={handleOpen}>
+              <Ionicons
+                name="menu-outline"
+                size={24}
+                color={app!.textColor}
+              />
+            </TouchableOpacity>
+          </View>
         ),
         headerTitleStyle: {
-          color: "#cdab8f",
+          color: app!.textColor,
         },
-        headerTintColor: "#cdab8f",
+        headerTintColor: app!.textColor,
       }}
     ></Stack.Screen>
   );
@@ -96,4 +110,9 @@ const styles = StyleSheet.create({
     opacity: 0.9,
     backgroundColor: "black",
   },
+  headerRightContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+
+  }
 });

@@ -1,11 +1,14 @@
 import { View, Text, StyleSheet } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import HeaderWithTitle from "../components/headers/HeaderWithMenu";
 import Background from "../components/ui/Background";
 import Card from "../components/containers/Card";
 import GithubButton from "../components/ui/GithubButton";
+import AppContext from "../contexts/AppContext";
 
 export default function about() {
+  const app = useContext(AppContext);
+
   return (
     <Background>
       <View style={styles.mainContainer}>
@@ -13,12 +16,12 @@ export default function about() {
 
         <Card>
           <View style={[styles.container, styles.firstContainer]}>
-            <Text style={styles.title}>Pets</Text>
+            <Text style={[styles.title, {color: app!.textColor}]}>Pets</Text>
           </View>
 
           <View style={styles.container}>
-            <Text style={styles.subtitle}>Desenvolvido por</Text>
-            <Text style={styles.title}>Adnir Andrade</Text>
+            <Text style={[styles.subtitle, {color: app!.textColor}]}>Desenvolvido por</Text>
+            <Text style={[styles.title, {color: app!.textColor}]}>Adnir Andrade</Text>
           </View>
           <GithubButton />
         </Card>
@@ -41,11 +44,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     textAlign: "center",
-    color: "#cdab8f",
   },
   subtitle: {
     fontSize: 16,
     textAlign: "center",
-    color: "#bf9370",
+    // color: "#bf9370",
   },
 });

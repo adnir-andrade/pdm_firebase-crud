@@ -1,8 +1,11 @@
 import { View, StyleSheet } from "react-native";
-import React, { PropsWithChildren } from "react";
+import React, { PropsWithChildren, useContext } from "react";
+import AppContext from "../../contexts/AppContext";
 
 export default function Card({ children }: PropsWithChildren) {
-  return <View style={[styles.container]}>{children}</View>;
+  const app = useContext(AppContext);
+
+  return <View style={[styles.container, { backgroundColor: app!.backgroundColor }]}>{children}</View>;
 }
 
 const styles = StyleSheet.create({
@@ -11,6 +14,5 @@ const styles = StyleSheet.create({
     width: "100%",
     borderRadius: 15,
     opacity: 0.75,
-    backgroundColor: "black",
   },
 });
